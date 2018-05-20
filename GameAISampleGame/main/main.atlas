@@ -2,10 +2,7 @@ images {
   image: "/assets/images/background.png"
 }
 images {
-  image: "/assets/images/logo.png"
-}
-images {
-  image: "/builtins/graphics/particle_blob.png"
+  image: "/assets/images/character.png"
 }
 margin: 0
 extrude_borders: 2
