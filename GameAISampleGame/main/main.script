@@ -1,0 +1,34 @@
+local tcp_client = require "defnet.tcp_client"
+
+local IP = "localhost"
+local PORT = 8124
+
+function init(self)
+	msg.post(".", "acquire_input_focus")
+
+	self.client = tcp_client.create(IP, PORT, function(data)
+		print("TCP client received data " .. data)
+	end,
+	function()
+		print("On disconnected")
+		self.client = nil
+	end)
+end
+
+function final(self)
+	if self.client then
+		self.client.destroy()
+	end
+end
+
+function update(self, dt)
+	if self.client then
+		self.client.update()
+	end
+end
+
+function on_input(self, action_id, action)
+	if action_id == hash("click") and action.pressed then
+		print("Click!")
+	end
+end
