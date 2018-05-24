@@ -1,25 +1,31 @@
 local create_socket_server_connector = require "uniconn/create_socket_server_connector"
+local json_util = require "uniconn/json_util"
 
 local IP = "localhost"
 local PORT = 8124
 
 function init(self)
+	self.socket_server_connector = create_socket_server_connector(PORT, function()
+		print("disconnected")
+	end)
+	self.socket_server_connector.connect("localhost")
 
-	msg.post(".", "acquire_input_focus")
-
-	self.socket_server_connector = create_socket_server_connector(IP, PORT)
+	self.socket_server_connector.on("message", function(data, ret)
+		print(json_util.stringify(data))
+		ret("Thanks!")
+	end)
+	
+	self.socket_server_connector.send("message", {
+		msg = "message from client."
+	}, function(data)
+		print(data)
+	end)
 end
 
 function final(self)
-	self.socket_server_connector.destroy()
+	self.socket_server_connector.disconnect()
 end
 
 function update(self, dt)
 	self.socket_server_connector.update()
-end
-
-function on_input(self, action_id, action)
-	if action_id == hash("click") and action.pressed then
-		print("Click!")
-	end
 end
