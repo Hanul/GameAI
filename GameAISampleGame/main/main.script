@@ -1,42 +1,34 @@
 local create_room_server_connector = require "uniconn/create_room_server_connector"
-local create_room = require "uniconn/create_room"
+local create_model = require "uniconn/create_model"
 local json = require "uniconn/json"
 
-local IP = "localhost"
-local PORT = 9126
+local HOST = "localhost"
+local WEB_SERVER_PORT = 9127
+local SOCKET_SERVER_PORT = 9126
 
 function init(self)
-	self.connector = create_room_server_connector(PORT, function()
+	self.connector = create_room_server_connector(SOCKET_SERVER_PORT, function()
 		print("disconnected")
 	end)
+	self.connector.connect(HOST)
 
-	local room1 = create_room(self.connector, "TestBox", "testRoom")
-	local room2 = create_room(self.connector, "TestBox", "testRoom")
-
-	room1.on("msg", function(data)
-		print(1, data)
-	end)
-	room2.on("msg", function(data)
-		print(2, data)
-	end)
-	
-	self.connector.connect(IP)
-
-	local room3 = create_room(self.connector, "TestBox", "testRoom")
-	local room4 = create_room(self.connector, "TestBox", "testRoom")
-
-	room3.on("msg", function(data)
-		print(3, data)
-	end)
-	room4.on("msg", function(data)
-		print(4, data)
-	end)
-
-	room4.send("msg", {
-		test2 = "Hello, Test2!",
-		date = "test"
-	}, function(result)
-		print(result)
+	local test_model = create_model(self.connector, "TestBox", "Test")
+	test_model.create({
+		name = "YJ Sim",
+		age = 27,
+		isMan = true
+	},
+	function(r)
+		print(r)
+	end,
+	function(r)
+		print(r)
+	end,
+	function(r)
+		print(r)
+	end,
+	function(r)
+		print(r)
 	end)
 end
 
