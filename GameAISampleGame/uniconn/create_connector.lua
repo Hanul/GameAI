@@ -13,7 +13,7 @@ return function(door_host, is_secure, web_server_port, socket_server_port, disco
 	url = url..door_host..":"..web_server_port.."/__SOCKET_SERVER_HOST?defaultHost="..door_host
 
 	http.request(url, "GET", function(self, _, response)
-		print(response)
+		connector.connect(response.response)
 	end)
 
 	return connector
