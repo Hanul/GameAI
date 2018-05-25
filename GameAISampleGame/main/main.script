@@ -1,31 +1,49 @@
-local create_socket_server_connector = require "uniconn/create_socket_server_connector"
-local json_util = require "uniconn/json_util"
+local create_room_server_connector = require "uniconn/create_room_server_connector"
+local create_room = require "uniconn/create_room"
+local json = require "uniconn/json"
 
 local IP = "localhost"
-local PORT = 8124
+local PORT = 9126
 
 function init(self)
-	self.socket_server_connector = create_socket_server_connector(PORT, function()
+	self.connector = create_room_server_connector(PORT, function()
 		print("disconnected")
 	end)
-	self.socket_server_connector.connect("localhost")
 
-	self.socket_server_connector.on("message", function(data, ret)
-		print(json_util.stringify(data))
-		ret("Thanks!")
+	local room1 = create_room(self.connector, "TestBox", "testRoom")
+	local room2 = create_room(self.connector, "TestBox", "testRoom")
+
+	room1.on("msg", function(data)
+		print(1, data)
+	end)
+	room2.on("msg", function(data)
+		print(2, data)
 	end)
 	
-	self.socket_server_connector.send("message", {
-		msg = "message from client."
-	}, function(data)
-		print(data)
+	self.connector.connect(IP)
+
+	local room3 = create_room(self.connector, "TestBox", "testRoom")
+	local room4 = create_room(self.connector, "TestBox", "testRoom")
+
+	room3.on("msg", function(data)
+		print(3, data)
+	end)
+	room4.on("msg", function(data)
+		print(4, data)
+	end)
+
+	room4.send("msg", {
+		test2 = "Hello, Test2!",
+		date = "test"
+	}, function(result)
+		print(result)
 	end)
 end
 
 function final(self)
-	self.socket_server_connector.disconnect()
+	self.connector.disconnect()
 end
 
 function update(self, dt)
-	self.socket_server_connector.update()
+	self.connector.update()
 end

@@ -1,5 +1,5 @@
 local tcp_client = require "defnet.tcp_client"
-local json_util = require "uniconn/json_util"
+local json = require "uniconn/json"
 
 -- create_socket_server_connector
 return function(port, disconnected_handler)
@@ -24,7 +24,7 @@ return function(port, disconnected_handler)
 		client = tcp_client.create(host, port,
 		-- 데이터 수신
 		function(received_str)
-			local params = json_util.parse(received_str)
+			local params = json.decode(received_str)
 			if params ~= nil then
 				local method_handlers = method_handler_map[params.methodName]
 				if method_handlers ~= nil then
@@ -56,6 +56,7 @@ return function(port, disconnected_handler)
 		if connector.is_connected() == true then
 			client.destroy()
 		end
+		client = nil
 	end
 
 	-- 접속 확인
@@ -91,7 +92,7 @@ return function(port, disconnected_handler)
 
 	connector.send = function(method_name, data, callback)
 		if connector.is_connected() == true then
-			client.send(json_util.stringify({
+			client.send(json.encode({
 				methodName = method_name,
 				data = data,
 				sendKey = send_key
