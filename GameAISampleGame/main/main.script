@@ -7,6 +7,7 @@ local WEB_SERVER_PORT = 9127
 local SOCKET_SERVER_PORT = 9126
 
 function init(self)
+	--[[
 	self.connector = create_room_server_connector(SOCKET_SERVER_PORT, function()
 		print("disconnected")
 	end)
@@ -30,12 +31,21 @@ function init(self)
 	function(r)
 		print(r)
 	end)
+	]]
+
+	msg.post(".", "acquire_input_focus")
 end
 
 function final(self)
-	self.connector.disconnect()
+	--self.connector.disconnect()
 end
 
 function update(self, dt)
-	self.connector.update()
+	--self.connector.update()
+end
+
+function on_input(self, action_id, action)
+	if action_id == hash("click") and action.pressed then
+		print(action.x, action.y)
+	end
 end

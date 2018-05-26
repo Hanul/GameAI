@@ -3,12 +3,14 @@
  */
 GameAI.AI = CLASS({
 	
-	init : (inner, self, params) => {
+	init : (inner, self, params, handlers) => {
 		//REQUIRED: params
-		//REQUIRED: params.host	소켓 서버 호스트
-		//REQUIRED: params.port	소켓 서버 포트
+		//REQUIRED: params.genre
+		//REQUIRED: params.aggression
+		//REQUIRED: handlers
+		//OPTIONAL: handlers.findTarget
 		
-		// 인공지능 삭제
+		// 인공지능 제거
 		let remove = self.remove = () => {
 			
 		};
