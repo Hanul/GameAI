@@ -32,8 +32,6 @@ function init(self)
 		print(r)
 	end)
 	]]
-
-	msg.post(".", "acquire_input_focus")
 end
 
 function final(self)
@@ -42,10 +40,4 @@ end
 
 function update(self, dt)
 	--self.connector.update()
-end
-
-function on_input(self, action_id, action)
-	if action_id == hash("click") and action.pressed then
-		print(action.x, action.y)
-	end
 end
