@@ -1,6 +1,0 @@
-GameAISampleServer.MAIN = METHOD({
-
-	run : () => {
-		
-	}
-});

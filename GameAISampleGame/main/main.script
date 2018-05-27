@@ -1,43 +1,38 @@
-local create_room_server_connector = require "uniconn/create_room_server_connector"
-local create_model = require "uniconn/create_model"
+local create_connector = require "uniconn/create_connector"
+local create_room = require "uniconn/create_room"
 local json = require "uniconn/json"
 
 local HOST = "localhost"
-local WEB_SERVER_PORT = 9127
-local SOCKET_SERVER_PORT = 9126
+local WEB_SERVER_PORT = 8522
+local SOCKET_SERVER_PORT = 8521
 
 function init(self)
-	--[[
-	self.connector = create_room_server_connector(SOCKET_SERVER_PORT, function()
+	self.connector = create_connector(HOST, false, WEB_SERVER_PORT, SOCKET_SERVER_PORT, function()
 		print("disconnected")
 	end)
-	self.connector.connect(HOST)
 
-	local test_model = create_model(self.connector, "TestBox", "Test")
-	test_model.create({
-		name = "YJ Sim",
-		age = 27,
-		isMan = true
-	},
-	function(r)
-		print(r)
-	end,
-	function(r)
-		print(r)
-	end,
-	function(r)
-		print(r)
-	end,
-	function(r)
-		print(r)
+	local game_room = create_room(self.connector, "GameAISampleServer", "Game")
+
+	local enemy
+	
+	game_room.on("showEnemy", function(data)
+		enemy = factory.create("#enemy_factory", vmath.vector3(data.x, data.y, 0))
 	end)
-	]]
+
+	game_room.on("moveEnemy", function(data)
+		local pos = go.get_position(enemy)
+		local cx = pos.x - data.x
+		local cy = pos.y - data.y
+		local norm = math.sqrt((cx * cx) + (cy * cy))
+		local travelTime = norm / 1000
+		go.animate(enemy, "position", go.PLAYBACK_ONCE_FORWARD, vmath.vector3(data.x, data.y, 0), go.EASING_LINEAR, travelTime)
+	end)
 end
 
 function final(self)
-	--self.connector.disconnect()
+	self.connector.disconnect()
 end
 
 function update(self, dt)
-	--self.connector.update()
+	self.connector.update()
 end

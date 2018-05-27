@@ -2,7 +2,7 @@ local create_room_server_connector = require "uniconn/create_room_server_connect
 
 -- create_connector
 return function(door_host, is_secure, web_server_port, socket_server_port, disconnected_handler)
-	local connector = create_room_server_connector(port, disconnected_handler)
+	local connector = create_room_server_connector(socket_server_port, disconnected_handler)
 
 	local url
 	if is_secure == true then

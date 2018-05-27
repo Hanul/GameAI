@@ -9,6 +9,25 @@ GameAI.AI = CLASS({
 		//REQUIRED: params.aggression
 		//REQUIRED: handlers
 		//OPTIONAL: handlers.findTarget
+		//OPTIONAL: handlers.moveTo
+		
+		let moveTo = handlers.moveTo;
+		
+		let id = UUID();
+		
+		let moveInterval = INTERVAL(1, () => {
+			moveTo( RANDOM({
+				min : 0,
+				max : 1280
+			}),  RANDOM({
+				min : 0,
+				max : 720
+			}));
+		});
+		
+		let getId = self.getId = () => {
+			return id;
+		};
 		
 		// 인공지능 제거
 		let remove = self.remove = () => {

@@ -7,7 +7,7 @@ BOOT({
 		defaultBoxName : 'GameAISampleServer',
 		
 		socketServerPort : 8521,
-		relayServerPort : 8522
+		webServerPort : 8522
 	},
 	
 	NODE_CONFIG : {
