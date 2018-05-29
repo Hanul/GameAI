@@ -1,6 +1,24 @@
 components {
-  id: "enemy"
-  component: "/main/enemy.script"
+  id: "hero"
+  component: "/main/hero.script"
+  position {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+}
+embedded_components {
+  id: "bullet_factory"
+  type: "factory"
+  data: "prototype: \"/main/bullet.go\"\n"
+  "load_dynamically: false\n"
+  ""
   position {
     x: 0.0
     y: 0.0
@@ -24,31 +42,13 @@ embedded_components {
   position {
     x: -23.0
     y: 0.0
-    z: 0.0
+    z: 1.0
   }
   rotation {
     x: 0.0
     y: 0.0
-    z: 0.7066921
-    w: 0.70752126
-  }
-}
-embedded_components {
-  id: "bullet_factory"
-  type: "factory"
-  data: "prototype: \"/main/bullet.go\"\n"
-  "load_dynamically: false\n"
-  ""
-  position {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-  }
-  rotation {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
+    z: 0.70892406
+    w: 0.70528483
   }
 }
 embedded_components {

@@ -32,6 +32,14 @@ GameAISampleServer.GameRoom = OBJECT({
 							y : y
 						}
 					});
+				},
+				shoot : () => {
+					send({
+						methodName : 'shootEnemy',
+						data : {
+							id : enemyAI.getId()
+						}
+					});
 				}
 			});
 			

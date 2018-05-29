@@ -10,8 +10,10 @@ GameAI.AI = CLASS({
 		//REQUIRED: handlers
 		//OPTIONAL: handlers.findTarget
 		//OPTIONAL: handlers.moveTo
+		//OPTIONAL: handlers.shoot
 		
 		let moveTo = handlers.moveTo;
+		let shoot = handlers.shoot;
 		
 		let id = UUID();
 		
@@ -23,6 +25,8 @@ GameAI.AI = CLASS({
 				min : 0,
 				max : 720
 			}));
+			
+			shoot();
 		});
 		
 		let getId = self.getId = () => {

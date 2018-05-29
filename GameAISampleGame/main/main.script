@@ -24,8 +24,16 @@ function init(self)
 		local cx = pos.x - data.x
 		local cy = pos.y - data.y
 		local norm = math.sqrt((cx * cx) + (cy * cy))
-		local travelTime = norm / 1000
+		local travelTime = norm / 600
 		go.animate(enemy, "position", go.PLAYBACK_ONCE_FORWARD, vmath.vector3(data.x, data.y, 0), go.EASING_LINEAR, travelTime)
+		msg.post(enemy, "rotate", {
+			x = data.x,
+			y = data.y
+		})
+	end)
+
+	game_room.on("shootEnemy", function(data)
+		msg.post(enemy, "shoot")
 	end)
 end
 
