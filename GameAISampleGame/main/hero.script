@@ -13,6 +13,12 @@ function on_input(self, action_id, action)
 		local norm = math.sqrt((cx * cx) + (cy * cy))
 		local travelTime = norm / self.moveSpeed
 		go.animate(".", "position", go.PLAYBACK_ONCE_FORWARD, vmath.vector3(action.x, action.y, 0), go.EASING_LINEAR, travelTime)
+		msg.post("main:/root", "move_hero", {
+			fromX = pos.x,
+			fromY = pos.y,
+			toX = action.x,
+			toY = action.y
+		})
 	end
 
 	-- 회전
@@ -28,6 +34,9 @@ function on_input(self, action_id, action)
 		msg.post(bullet, "set_owner", {
 			owner = "hero"
 		})
+		msg.post("main:/root", "shoot_hero", {
+			rotation = go.get_rotation().z
+		})
 	end
 end
 
@@ -35,6 +44,7 @@ function on_message(self, message_id, message, sender)
 	if message_id == hash("hit") then
 		if message.owner == "enemy" then
 			go.delete(sender)
+			msg.post("main:/root", "increase_enemy_point")
 		end
 	end
 end

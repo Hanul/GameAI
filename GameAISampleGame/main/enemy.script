@@ -6,17 +6,19 @@ function on_message(self, message_id, message, sender)
 		go.set_rotation(vmath.quat_rotation_z(angle))
 	
 	elseif message_id == hash("shoot") then
+
+		local angle = message.angle
+		go.set_rotation(vmath.quat_rotation_z(angle))
+		
 		local bullet = factory.create("#bullet_factory", vmath.vector3(go.get_position().x, go.get_position().y, 0), go.get_rotation())
 		msg.post(bullet, "set_owner", {
 			owner = "enemy"
 		})
-	end
-end
-
-function on_message(self, message_id, message, sender)
-	if message_id == hash("hit") then
+	
+	elseif message_id == hash("hit") then
 		if message.owner == "hero" then
 			go.delete(sender)
+			msg.post("main:/root", "increase_hero_point")
 		end
 	end
 end

@@ -7,19 +7,23 @@ local WEB_SERVER_PORT = 8522
 local SOCKET_SERVER_PORT = 8521
 
 function init(self)
+
+	self.hero_point = 0;
+	self.enemy_point = 0;
+	
 	self.connector = create_connector(HOST, false, WEB_SERVER_PORT, SOCKET_SERVER_PORT, function()
 		print("disconnected")
 	end)
 
-	local game_room = create_room(self.connector, "GameAISampleServer", "Game")
+	self.game_room = create_room(self.connector, "GameAISampleServer", "Game")
 
 	local enemy
 	
-	game_room.on("showEnemy", function(data)
+	self.game_room.on("showEnemy", function(data)
 		enemy = factory.create("#enemy_factory", vmath.vector3(data.x, data.y, 0))
 	end)
 
-	game_room.on("moveEnemy", function(data)
+	self.game_room.on("moveEnemy", function(data)
 		local pos = go.get_position(enemy)
 		local cx = pos.x - data.x
 		local cy = pos.y - data.y
@@ -32,8 +36,10 @@ function init(self)
 		})
 	end)
 
-	game_room.on("shootEnemy", function(data)
-		msg.post(enemy, "shoot")
+	self.game_room.on("shootEnemy", function(data)
+		msg.post(enemy, "shoot", {
+			angle = data.angle
+		})
 	end)
 end
 
@@ -43,4 +49,22 @@ end
 
 function update(self, dt)
 	self.connector.update()
+end
+
+function on_message(self, message_id, message, sender)
+
+	if message_id == hash("increase_hero_point") then
+		self.hero_point = self.hero_point + 1
+		label.set_text("#hero_point", "Hero Point : "..self.hero_point)
+		
+	elseif message_id == hash("increase_enemy_point") then
+		self.enemy_point = self.enemy_point + 1
+		label.set_text("#enemy_point", "Enemy Point : "..self.enemy_point)
+		
+	elseif message_id == hash("move_hero") then
+		self.game_room.send("moveHero", message)
+		
+	elseif message_id == hash("shoot_hero") then
+		self.game_room.send("shootHero", message)
+	end
 end
