@@ -1,7 +1,7 @@
 /*
  * 온라인 게임에서 사용되는 인공지능
  */
-GameAI.AI = CLASS({
+GameAI.TopViewFPSAI = CLASS({
 	
 	init : (inner, self, params, handlers) => {
 		//REQUIRED: params
@@ -44,6 +44,9 @@ GameAI.AI = CLASS({
 		
 		let move = () => {
 			
+			let beforeX = toX;
+			let beforeY = toY;
+			
 			toX = RANDOM({
 				min : minMovableX,
 				max : maxMovableX
@@ -53,6 +56,18 @@ GameAI.AI = CLASS({
 				max : maxMovableY
 			});
 			
+			if (toX < beforeX - 100) {
+				toX = beforeX - 100;
+			} else if (toX > beforeX + 100) {
+				toX = beforeX + 100;
+			}
+			
+			if (toY < beforeY - 100) {
+				toY = beforeY - 100;
+			} else if (toY > beforeY + 100) {
+				toY = beforeY + 100;
+			}
+			
 			moveTo(toX, toY);
 		};
 		
@@ -61,7 +76,7 @@ GameAI.AI = CLASS({
 			
 			moveDelay = DELAY(RANDOM({
 				min : 10,
-				max : 200
+				max : 100
 			}) / 100, () => {
 				
 				move();
@@ -80,7 +95,13 @@ GameAI.AI = CLASS({
 				
 				let targetPosition = findTargetPosition();
 				
-				shoot(Math.atan2(toX - targetPosition.x, targetPosition.y - toY));
+				shoot(Math.atan2(toX - targetPosition.x + RANDOM({
+					min : -30,
+					max : 30
+				}), targetPosition.y - toY + RANDOM({
+					min : -30,
+					max : 30
+				})));
 				
 				createShootDelay();
 			});
@@ -88,7 +109,10 @@ GameAI.AI = CLASS({
 		
 		// 상대가 공격하는 것을 감지하고 이동
 		let announceTargetShoot = self.announceTargetShoot = () => {
-			move();
+			// 확률적으로
+			if (RANDOM(10) < 8) {
+				move();
+			}
 		};
 		
 		// 인공지능 제거

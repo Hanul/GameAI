@@ -24,7 +24,7 @@ GameAISampleServer.GameRoom = OBJECT({
 			};
 			
 			// 누군가가 접속하면, 해당 유저와 상대할 AI를 생성합니다.
-			let enemyAI = GameAI.AI({
+			let enemyAI = GameAI.TopViewFPSAI({
 				
 				x : enemyX,
 				y : enemyY,
