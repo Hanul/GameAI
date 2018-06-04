@@ -3,6 +3,10 @@
  */
 GameAI.TopViewFPSAI = CLASS({
 	
+	preset : () => {
+		return GameAI.AI;
+	},
+	
 	init : (inner, self, params, handlers) => {
 		//REQUIRED: params
 		//REQUIRED: params.x
@@ -32,12 +36,6 @@ GameAI.TopViewFPSAI = CLASS({
 		let shoot = handlers.shoot;
 		
 		// 장르가 탑뷰 FPS인 경우, 총알을 피하며 유저가 이동하려 하는 곳에 탄을 발사합니다.
-		
-		let id = UUID();
-		
-		let getId = self.getId = () => {
-			return id;
-		};
 		
 		let toX = x;
 		let toY = y;
@@ -115,10 +113,14 @@ GameAI.TopViewFPSAI = CLASS({
 			}
 		};
 		
-		// 인공지능 제거
-		let remove = self.remove = () => {
-			moveDelay.remove();
-			shootDelay.remove();
-		};
+		let remove;
+		OVERRIDE(self.remove, (origin) => {
+			
+			// 인공지능 제거
+			remove = self.remove = () => {
+				moveDelay.remove();
+				shootDelay.remove();
+			};
+		});
 	}
 });
