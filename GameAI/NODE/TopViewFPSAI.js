@@ -15,9 +15,6 @@ GameAI.TopViewFPSAI = CLASS({
 		//REQUIRED: params.maxMovableX
 		//REQUIRED: params.minMovableY
 		//REQUIRED: params.maxMovableY
-		//REQUIRED: params.genre
-		//REQUIRED: params.aggression
-		//REQUIRED: params.accuracy
 		//REQUIRED: handlers
 		//OPTIONAL: handlers.findTargetPosition
 		//OPTIONAL: handlers.moveTo
@@ -29,7 +26,6 @@ GameAI.TopViewFPSAI = CLASS({
 		let maxMovableX = params.maxMovableX;
 		let minMovableY = params.minMovableY;
 		let maxMovableY = params.maxMovableY;
-		let aggression = params.aggression;
 		
 		let findTargetPosition = handlers.findTargetPosition;
 		let moveTo = handlers.moveTo;
